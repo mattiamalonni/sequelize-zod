@@ -1,6 +1,6 @@
 {
   "name": "sequelize-zod",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Type-safe Zod validation for Sequelize model attributes",
   "author": "Mattia Malonni",
   "type": "module",
