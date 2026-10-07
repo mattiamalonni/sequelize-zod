@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    name: Verify (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: minimum peer versions
+            sequelize: 6.0.0
+            zod: 4.0.0
+          - name: latest peer versions
+            sequelize: 6.37.8
+            zod: 4.6.5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Install matrix peer versions
+        run: npm install --no-save --package-lock=false "sequelize@${{ matrix.sequelize }}" "zod@${{ matrix.zod }}"
+      - run: npm run check
+      - run: npm run test:coverage
+      - run: npm run build
